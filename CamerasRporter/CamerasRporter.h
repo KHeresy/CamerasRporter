@@ -1,7 +1,28 @@
 #pragma once
 
+#include <array>
+
+#include <QComboBox>
+#include <QFileInfo>
+#include <QMediaPlayer>
 #include <QtWidgets/QMainWindow>
+
 #include "ui_CamerasRporter.h"
+
+class CCameraInfo
+{
+public:
+	QString			m_sFolder;
+	QString			m_sPath;
+	QStringList		m_vFileList;
+	QComboBox*		m_pComboBox;
+	QMediaPlayer*	m_pPlayer;
+
+public:
+	CCameraInfo();
+	bool setPath(const QString& sPath);
+	void play(int iIdx);
+};
 
 class CamerasRporter : public QMainWindow
 {
@@ -10,6 +31,12 @@ class CamerasRporter : public QMainWindow
 public:
 	CamerasRporter(QWidget *parent = Q_NULLPTR);
 
+public slots:
+	void slotOpenFolder();
+	void slotCamera1Changed(int);
+	void slotCamera2Changed(int);
+
 private:
-	Ui::CamerasRporterClass ui;
+	Ui::CamerasRporterClass		ui;
+	std::array<CCameraInfo, 2>	aCameraInfo;
 };
