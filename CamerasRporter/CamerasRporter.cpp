@@ -35,13 +35,9 @@ CamerasRporter::CamerasRporter(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	aCameraInfo[0].m_sFolder = "/VIDA/";
-	aCameraInfo[0].m_pComboBox = ui.comboFileList1;
-	aCameraInfo[0].m_pPlayer->setVideoOutput(ui.videoCamera1);
-
-	aCameraInfo[1].m_sFolder = "/VIDB/";
-	aCameraInfo[1].m_pComboBox = ui.comboFileList2;
-	aCameraInfo[1].m_pPlayer->setVideoOutput(ui.videoCamera2);
+	aCameraUI = { ui.camera1, ui.camera2 };
+	aCameraUI[0]->setName("/VIDA/");
+	aCameraUI[1]->setName("/VIDB/");
 }
 
 void CamerasRporter::slotOpenFolder()
@@ -51,9 +47,9 @@ void CamerasRporter::slotOpenFolder()
 	{
 		ui.labelInfo->setText(tr("Path: ") + sFolderName);
 
-		for (CCameraInfo& sCameraInfo : aCameraInfo)
+		for (CameraUI* pCameraUI : aCameraUI)
 		{
-			if (sCameraInfo.setPath( sFolderName))
+			if (pCameraUI->setPath( sFolderName))
 			{
 
 			}
@@ -63,14 +59,4 @@ void CamerasRporter::slotOpenFolder()
 			}
 		}
 	}
-}
-
-void CamerasRporter::slotCamera1Changed(int iIdx)
-{
-	aCameraInfo[0].play(iIdx);
-}
-
-void CamerasRporter::slotCamera2Changed(int iIdx)
-{
-	aCameraInfo[1].play(iIdx);
 }

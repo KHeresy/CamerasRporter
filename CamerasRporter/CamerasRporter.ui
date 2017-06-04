@@ -51,24 +51,12 @@
          <property name="title">
           <string>Camera 1</string>
          </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QWidget" name="widget" native="true">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>40</height>
-             </size>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <widget class="QComboBox" name="comboFileList1"/>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QVideoWidget" name="videoCamera1" native="true"/>
+           <widget class="CameraUI" name="camera1" native="true"/>
           </item>
          </layout>
         </widget>
@@ -78,24 +66,12 @@
          <property name="title">
           <string>Camera 2</string>
          </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QWidget" name="widget_2" native="true">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>40</height>
-             </size>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <item>
-              <widget class="QComboBox" name="comboFileList2"/>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QVideoWidget" name="videoCamera2" native="true"/>
+           <widget class="CameraUI" name="camera2" native="true"/>
           </item>
          </layout>
         </widget>
@@ -163,9 +139,10 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QVideoWidget</class>
+   <class>CameraUI</class>
    <extends>QWidget</extends>
-   <header>qvideowidget.h</header>
+   <header>CameraUI.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
@@ -205,41 +182,39 @@
    </hints>
   </connection>
   <connection>
-   <sender>comboFileList1</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>CamerasRporterClass</receiver>
-   <slot>slotCamera1Changed(int)</slot>
+   <sender>groupCamera1</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>camera1</receiver>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>150</x>
-     <y>154</y>
+     <x>36</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
-     <x>724</x>
-     <y>-17</y>
+     <x>182</x>
+     <y>246</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>comboFileList2</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>CamerasRporterClass</receiver>
-   <slot>slotCamera2Changed(int)</slot>
+   <sender>groupCamera2</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>camera2</receiver>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>559</x>
-     <y>158</y>
+     <x>486</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
-     <x>594</x>
-     <y>-22</y>
+     <x>583</x>
+     <y>241</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>slotOpenFolder()</slot>
-  <slot>slotCamera1Changed(int)</slot>
-  <slot>slotCamera2Changed(int)</slot>
  </slots>
 </ui>

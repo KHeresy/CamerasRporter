@@ -33,10 +33,8 @@ public:
 
 public slots:
 	void slotOpenFolder();
-	void slotCamera1Changed(int);
-	void slotCamera2Changed(int);
 
 private:
 	Ui::CamerasRporterClass		ui;
-	std::array<CCameraInfo, 2>	aCameraInfo;
+	std::array<CameraUI*, 2>	aCameraUI;
 };
