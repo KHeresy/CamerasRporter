@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>941</width>
-    <height>541</height>
+    <width>1054</width>
+    <height>729</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,35 +45,38 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QGroupBox" name="groupCamera1">
-         <property name="title">
-          <string>Camera 1</string>
+        <widget class="QSplitter" name="splitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="CameraUI" name="camera1" native="true"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupCamera2">
-         <property name="title">
-          <string>Camera 2</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="CameraUI" name="camera2" native="true"/>
-          </item>
-         </layout>
+         <widget class="QGroupBox" name="groupCamera1">
+          <property name="title">
+           <string>Camera 1</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="CameraUI" name="camera1" native="true"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QGroupBox" name="groupCamera2">
+          <property name="title">
+           <string>Camera 2</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="CameraUI" name="camera2" native="true"/>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>
@@ -102,7 +105,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>941</width>
+     <width>1054</width>
      <height>21</height>
     </rect>
    </property>
