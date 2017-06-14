@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>456</width>
-    <height>331</height>
+    <width>513</width>
+    <height>372</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,49 +33,115 @@
     <widget class="QVideoWidget" name="videoArea" native="true"/>
    </item>
    <item>
-    <widget class="QWidget" name="widgetButtom" native="true">
+    <widget class="QWidget" name="widgetBottom" native="true">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>40</height>
+       <height>80</height>
       </size>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QLabel" name="labelTimeCode">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Time Code</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="layoutPlayerController2">
+        <item>
+         <widget class="QLabel" name="labelCurrentTime">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>00:00.000</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="sliderTime">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonAudio">
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Audio</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QSlider" name="sliderTime">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="buttonAudio">
-        <property name="maximumSize">
-         <size>
-          <width>50</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Audio</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="layoutPlayerController1">
+        <item>
+         <widget class="QLabel" name="labelTotalTime">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>00:00.000</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonPrevious">
+          <property name="text">
+           <string>&lt;&lt;</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonPlay">
+          <property name="text">
+           <string>Play</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonNext">
+          <property name="text">
+           <string>&gt;&gt;</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -103,12 +169,97 @@
     </hint>
     <hint type="destinationlabel">
      <x>209</x>
-     <y>-17</y>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonAudio</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>Form</receiver>
+   <slot>slotAudio(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>493</x>
+     <y>350</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>449</x>
+     <y>313</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonPlay</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>Form</receiver>
+   <slot>slotPlay(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>267</x>
+     <y>303</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>364</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonPrevious</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>slotPrevious()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>303</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonNext</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>slotNext()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>381</x>
+     <y>298</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>508</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sliderTime</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>Form</receiver>
+   <slot>slotSetTime(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>228</x>
+     <y>344</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>510</x>
+     <y>229</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>playFile(int)</slot>
+  <slot>slotAudio(bool)</slot>
+  <slot>slotPlay(bool)</slot>
+  <slot>slotPrevious()</slot>
+  <slot>slotNext()</slot>
+  <slot>slotSetTime(int)</slot>
  </slots>
 </ui>

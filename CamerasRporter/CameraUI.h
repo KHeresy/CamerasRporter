@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMediaPlayer>
+#include <QDateTime>
 #include <QtWidgets/QWidget>
 
 #include "ui_CameraUI.h"
@@ -20,6 +21,15 @@ public:
 
 public slots:
 	void playFile(int);
+	void slotAudio(bool);
+	void slotPlay(bool);
+	void slotPrevious();
+	void slotNext();
+	void slotSetTime(int);
+	void durationChanged(qint64 duration);
+	void mediaStatusChanged(QMediaPlayer::MediaStatus status);
+	void positionChanged(qint64 position);
+	void stateChanged(QMediaPlayer::State eState);
 
 private:
 	Ui::Form		ui;
@@ -28,4 +38,6 @@ private:
 	QString			m_sName;
 	QString			m_sPath;
 	QStringList		m_vFileList;
+	QVector<QDateTime>	m_vDateTimeList;
+	QSet<QDate>			m_setDate;
 };
