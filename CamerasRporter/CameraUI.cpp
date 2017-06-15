@@ -73,14 +73,14 @@ void CameraUI::slotPlay(bool bClicked)
 
 void CameraUI::slotPrevious()
 {
-	m_mPlayer.pause();
-	m_mPlayer.setPosition(m_mPlayer.position() - 100);
+	//m_mPlayer.pause();
+	m_mPlayer.setPosition(m_mPlayer.position() - m_iFrameInterval);
 }
 
 void CameraUI::slotNext()
 {
-	m_mPlayer.pause();
-	m_mPlayer.setPosition(m_mPlayer.position() + 100);
+	//m_mPlayer.pause();
+	m_mPlayer.setPosition(m_mPlayer.position() + m_iFrameInterval);
 }
 
 void CameraUI::slotSetTime(int iTime)
@@ -121,6 +121,7 @@ void CameraUI::mediaStatusChanged(QMediaPlayer::MediaStatus eStatus)
 	{
 	case QMediaPlayer::BufferedMedia:
 	case QMediaPlayer::LoadedMedia:
+		m_iFrameInterval = 1000 / m_mPlayer.metaData("VideoFrameRate").toReal();
 		ui.videoArea->fitInView(m_pVideoItem,Qt::KeepAspectRatio);
 	}
 }
