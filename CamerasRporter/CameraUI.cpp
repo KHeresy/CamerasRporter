@@ -6,8 +6,13 @@ CameraUI::CameraUI(QWidget *parent) :QWidget(parent)
 {
 	ui.setupUi(this);
 
-	m_mPlayer.setVideoOutput(ui.videoArea);
+	m_pVideoItem = new QGraphicsVideoItem();
+	ui.videoArea->setScene(new QGraphicsScene());
+	ui.videoArea->scene()->addItem(m_pVideoItem);
+
+	m_mPlayer.setVideoOutput(m_pVideoItem);
 	m_mPlayer.setMuted(true);
+
 	connect(&m_mPlayer, &QMediaPlayer::durationChanged, this, &CameraUI::durationChanged);
 	connect(&m_mPlayer, &QMediaPlayer::mediaStatusChanged, this, &CameraUI::mediaStatusChanged);
 	connect(&m_mPlayer, &QMediaPlayer::positionChanged, this, &CameraUI::positionChanged);
@@ -40,6 +45,11 @@ bool CameraUI::setPath(QString sPath)
 		return true;
 	}
 	return false;
+}
+
+void CameraUI::resizeEvent(QResizeEvent * pEvent)
+{
+	ui.videoArea->fitInView(m_pVideoItem, Qt::KeepAspectRatio);
 }
 
 void CameraUI::slotAudio(bool bClicked)
@@ -84,8 +94,14 @@ void CameraUI::durationChanged(qint64 duration)
 	ui.labelTotalTime->setText(mTime.toString("mm:ss.zzz"));
 }
 
-void CameraUI::mediaStatusChanged(QMediaPlayer::MediaStatus status)
+void CameraUI::mediaStatusChanged(QMediaPlayer::MediaStatus eStatus)
 {
+	switch (eStatus)
+	{
+	case QMediaPlayer::BufferedMedia:
+	case QMediaPlayer::LoadedMedia:
+		ui.videoArea->fitInView(m_pVideoItem,Qt::KeepAspectRatio);
+	}
 }
 
 void CameraUI::positionChanged(qint64 position)

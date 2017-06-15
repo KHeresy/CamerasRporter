@@ -1,7 +1,8 @@
 #pragma once
 
-#include <QMediaPlayer>
 #include <QDateTime>
+#include <QGraphicsVideoItem>
+#include <QMediaPlayer>
 #include <QtWidgets/QWidget>
 
 #include "ui_CameraUI.h"
@@ -18,6 +19,7 @@ public:
 	}
 
 	bool setPath(QString sPath);
+	void resizeEvent(QResizeEvent* pEvent);
 
 public slots:
 	void playFile(int);
@@ -38,6 +40,9 @@ private:
 	QString			m_sName;
 	QString			m_sPath;
 	QStringList		m_vFileList;
+
 	QVector<QDateTime>	m_vDateTimeList;
 	QSet<QDate>			m_setDate;
+
+	QGraphicsVideoItem*	m_pVideoItem;
 };

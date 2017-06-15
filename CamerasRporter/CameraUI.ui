@@ -30,7 +30,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QVideoWidget" name="videoArea" native="true"/>
+    <widget class="QGraphicsView" name="videoArea"/>
    </item>
    <item>
     <widget class="QWidget" name="widgetBottom" native="true">
@@ -148,13 +148,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QVideoWidget</class>
-   <extends>QWidget</extends>
-   <header>qvideowidget.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>
