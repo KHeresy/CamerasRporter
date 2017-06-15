@@ -1,6 +1,8 @@
 #include "CameraUI.h"
 
 #include <QDir>
+#include <QFileDialog>
+#include <QMessageBox>
 
 CameraUI::CameraUI(QWidget *parent) :QWidget(parent)
 {
@@ -84,6 +86,25 @@ void CameraUI::slotNext()
 void CameraUI::slotSetTime(int iTime)
 {
 	m_mPlayer.setPosition(iTime);
+}
+
+void CameraUI::slotSaveImage()
+{
+	QString sFilename = QFileDialog::getSaveFileName(this, tr("Save Image"), "", tr("PNG (*.png) ;; JPEG (*.jpg)"));
+	if (sFilename != "")
+	{
+		QGraphicsScene* pScene = ui.videoArea->scene();
+		pScene->clearSelection();
+		pScene->setSceneRect(pScene->itemsBoundingRect());
+		
+		QImage imgOutput(m_pVideoItem->nativeSize().toSize(), QImage::Format_ARGB32);
+		imgOutput.fill(Qt::transparent);
+
+		QPainter qPainter(&imgOutput);
+		pScene->render(&qPainter);
+
+		imgOutput.save(sFilename);
+	}
 }
 
 void CameraUI::durationChanged(qint64 duration)

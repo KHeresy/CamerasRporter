@@ -28,6 +28,7 @@ public slots:
 	void slotPrevious();
 	void slotNext();
 	void slotSetTime(int);
+	void slotSaveImage();
 	void durationChanged(qint64 duration);
 	void mediaStatusChanged(QMediaPlayer::MediaStatus status);
 	void positionChanged(qint64 position);

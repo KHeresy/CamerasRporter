@@ -14,6 +14,21 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>1</number>
+   </property>
+   <property name="leftMargin">
+    <number>1</number>
+   </property>
+   <property name="topMargin">
+    <number>1</number>
+   </property>
+   <property name="rightMargin">
+    <number>1</number>
+   </property>
+   <property name="bottomMargin">
+    <number>1</number>
+   </property>
    <item>
     <widget class="QWidget" name="widgetTop" native="true">
      <property name="maximumSize">
@@ -23,6 +38,21 @@
       </size>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>1</number>
+      </property>
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="topMargin">
+       <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>1</number>
+      </property>
+      <property name="bottomMargin">
+       <number>1</number>
+      </property>
       <item>
        <widget class="QComboBox" name="comboFileList"/>
       </item>
@@ -44,6 +74,21 @@
       </size>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>1</number>
+      </property>
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="topMargin">
+       <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>1</number>
+      </property>
+      <property name="bottomMargin">
+       <number>1</number>
+      </property>
       <item>
        <layout class="QHBoxLayout" name="layoutPlayerController2">
         <item>
@@ -141,6 +186,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="buttonSaveImage">
+          <property name="text">
+           <string>Save Image</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -158,7 +210,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>149</x>
-     <y>31</y>
+     <y>14</y>
     </hint>
     <hint type="destinationlabel">
      <x>209</x>
@@ -174,7 +226,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>493</x>
-     <y>350</y>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
      <x>449</x>
@@ -189,8 +241,8 @@
    <slot>slotPlay(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>267</x>
-     <y>303</y>
+     <x>281</x>
+     <y>368</y>
     </hint>
     <hint type="destinationlabel">
      <x>318</x>
@@ -205,8 +257,8 @@
    <slot>slotPrevious()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>125</x>
-     <y>303</y>
+     <x>166</x>
+     <y>368</y>
     </hint>
     <hint type="destinationlabel">
      <x>509</x>
@@ -221,8 +273,8 @@
    <slot>slotNext()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>381</x>
-     <y>298</y>
+     <x>395</x>
+     <y>368</y>
     </hint>
     <hint type="destinationlabel">
      <x>508</x>
@@ -237,12 +289,28 @@
    <slot>slotSetTime(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>228</x>
-     <y>344</y>
+     <x>303</x>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>510</x>
      <y>229</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonSaveImage</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>slotSaveImage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>434</x>
+     <y>353</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>35</x>
+     <y>371</y>
     </hint>
    </hints>
   </connection>
@@ -254,5 +322,6 @@
   <slot>slotPrevious()</slot>
   <slot>slotNext()</slot>
   <slot>slotSetTime(int)</slot>
+  <slot>slotSaveImage()</slot>
  </slots>
 </ui>
