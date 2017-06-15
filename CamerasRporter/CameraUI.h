@@ -37,6 +37,7 @@ public slots:
 private:
 	Ui::Form		ui;
 
+	int		m_iFrameInterval;
 	QMediaPlayer	m_mPlayer;
 	QString			m_sName;
 	QString			m_sPath;
