@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>513</width>
-    <height>372</height>
+    <width>818</width>
+    <height>628</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -114,6 +114,18 @@
          <widget class="QSlider" name="sliderTime">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="invertedAppearance">
+           <bool>false</bool>
+          </property>
+          <property name="invertedControls">
+           <bool>false</bool>
+          </property>
+          <property name="tickPosition">
+           <enum>QSlider::NoTicks</enum>
+          </property>
+          <property name="tickInterval">
+           <number>0</number>
           </property>
          </widget>
         </item>
@@ -225,8 +237,8 @@
    <slot>slotAudio(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>493</x>
-     <y>321</y>
+     <x>798</x>
+     <y>579</y>
     </hint>
     <hint type="destinationlabel">
      <x>449</x>
@@ -241,8 +253,8 @@
    <slot>slotPlay(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>281</x>
-     <y>368</y>
+     <x>358</x>
+     <y>624</y>
     </hint>
     <hint type="destinationlabel">
      <x>318</x>
@@ -258,7 +270,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>166</x>
-     <y>368</y>
+     <y>624</y>
     </hint>
     <hint type="destinationlabel">
      <x>509</x>
@@ -273,8 +285,8 @@
    <slot>slotNext()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>395</x>
-     <y>368</y>
+     <x>547</x>
+     <y>624</y>
     </hint>
     <hint type="destinationlabel">
      <x>508</x>
@@ -290,7 +302,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>303</x>
-     <y>320</y>
+     <y>580</y>
     </hint>
     <hint type="destinationlabel">
      <x>510</x>
@@ -305,12 +317,28 @@
    <slot>slotSaveImage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>434</x>
-     <y>353</y>
+     <x>663</x>
+     <y>609</y>
     </hint>
     <hint type="destinationlabel">
      <x>35</x>
      <y>371</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sliderTime</sender>
+   <signal>actionTriggered(int)</signal>
+   <receiver>Form</receiver>
+   <slot>slotSliderAction(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>101</x>
+     <y>584</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
+     <y>-32</y>
     </hint>
    </hints>
   </connection>
@@ -323,5 +351,6 @@
   <slot>slotNext()</slot>
   <slot>slotSetTime(int)</slot>
   <slot>slotSaveImage()</slot>
+  <slot>slotSliderAction(int)</slot>
  </slots>
 </ui>

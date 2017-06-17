@@ -35,9 +35,9 @@ CamerasRporter::CamerasRporter(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	aCameraUI = { ui.camera1, ui.camera2 };
-	aCameraUI[0]->setName("/VIDA/");
-	aCameraUI[1]->setName("/VIDB/");
+	m_aCameraUI = { ui.camera1, ui.camera2 };
+	m_aCameraUI[0]->setName("/VIDA/");
+	m_aCameraUI[1]->setName("/VIDB/");
 }
 
 void CamerasRporter::slotOpenFolder()
@@ -45,18 +45,29 @@ void CamerasRporter::slotOpenFolder()
 	QString sFolderName = QFileDialog::getExistingDirectory(this, tr("Select the video folder"), "");
 	if (sFolderName != "")
 	{
+		// Updat UI information
 		ui.labelInfo->setText(tr("Path: ") + sFolderName);
 
-		for (CameraUI* pCameraUI : aCameraUI)
+		// set path to Camera UI
+		m_setDate.clear();
+		for (CameraUI* pCameraUI : m_aCameraUI)
 		{
-			if (pCameraUI->setPath( sFolderName))
+			if (pCameraUI->isEnabled())
 			{
+				if (pCameraUI->setPath(sFolderName))
+				{
+					m_setDate.unite(pCameraUI->getDaetSet());
+				}
+				else
+				{
 
-			}
-			else
-			{
-
+				}
 			}
 		}
+
+		// Update combo box
+		ui.comboDate->clear();
+		for (const QDate& rDate : m_setDate)
+			ui.comboDate->addItem(rDate.toString("yyyy/MM/dd"));
 	}
 }

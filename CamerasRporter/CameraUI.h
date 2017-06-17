@@ -20,6 +20,10 @@ public:
 
 	bool setPath(QString sPath);
 	void resizeEvent(QResizeEvent* pEvent);
+	const QSet<QDate>& getDaetSet() const
+	{
+		return m_setDate;
+	}
 
 public slots:
 	void playFile(int);
@@ -28,6 +32,7 @@ public slots:
 	void slotPrevious();
 	void slotNext();
 	void slotSetTime(int);
+	void slotSliderAction(int);
 	void slotSaveImage();
 	void durationChanged(qint64 duration);
 	void mediaStatusChanged(QMediaPlayer::MediaStatus status);
@@ -37,7 +42,9 @@ public slots:
 private:
 	Ui::Form		ui;
 
-	int		m_iFrameInterval;
+	int				m_iFrameInterval;
+	int				m_iTimeScaleInUI;
+
 	QMediaPlayer	m_mPlayer;
 	QString			m_sName;
 	QString			m_sPath;

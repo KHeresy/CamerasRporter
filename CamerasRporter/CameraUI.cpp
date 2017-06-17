@@ -8,6 +8,8 @@ CameraUI::CameraUI(QWidget *parent) :QWidget(parent)
 {
 	ui.setupUi(this);
 
+	m_iTimeScaleInUI = 100;
+
 	m_pVideoItem = new QGraphicsVideoItem();
 	ui.videoArea->setScene(new QGraphicsScene());
 	ui.videoArea->scene()->addItem(m_pVideoItem);
@@ -73,19 +75,22 @@ void CameraUI::slotPlay(bool bClicked)
 
 void CameraUI::slotPrevious()
 {
-	//m_mPlayer.pause();
-	m_mPlayer.setPosition(m_mPlayer.position() - m_iFrameInterval);
+	m_mPlayer.setPosition(m_mPlayer.position() - 5 * m_iFrameInterval);
 }
 
 void CameraUI::slotNext()
 {
-	//m_mPlayer.pause();
-	m_mPlayer.setPosition(m_mPlayer.position() + m_iFrameInterval);
+	m_mPlayer.setPosition(m_mPlayer.position() + 5 * m_iFrameInterval);
 }
 
 void CameraUI::slotSetTime(int iTime)
 {
-	m_mPlayer.setPosition(iTime);
+	m_mPlayer.setPosition(m_iTimeScaleInUI * iTime);
+}
+
+void CameraUI::slotSliderAction(int)
+{
+	slotSetTime( ui.sliderTime->value());
 }
 
 void CameraUI::slotSaveImage()
@@ -109,7 +114,7 @@ void CameraUI::slotSaveImage()
 
 void CameraUI::durationChanged(qint64 duration)
 {
-	ui.sliderTime->setMaximum(duration);
+	ui.sliderTime->setMaximum(duration / m_iTimeScaleInUI);
 
 	QTime mTime = QTime::fromMSecsSinceStartOfDay(duration);
 	ui.labelTotalTime->setText(mTime.toString("mm:ss.zzz"));
@@ -121,14 +126,14 @@ void CameraUI::mediaStatusChanged(QMediaPlayer::MediaStatus eStatus)
 	{
 	case QMediaPlayer::BufferedMedia:
 	case QMediaPlayer::LoadedMedia:
-		m_iFrameInterval = 1000 / m_mPlayer.metaData("VideoFrameRate").toReal();
+		m_iFrameInterval = 1000 / (int)m_mPlayer.metaData("VideoFrameRate").toReal();
 		ui.videoArea->fitInView(m_pVideoItem,Qt::KeepAspectRatio);
 	}
 }
 
 void CameraUI::positionChanged(qint64 position)
 {
-	ui.sliderTime->setValue(position);
+	ui.sliderTime->setValue(position / m_iTimeScaleInUI);
 
 	QTime mTime = QTime::fromMSecsSinceStartOfDay(position);
 	ui.labelCurrentTime->setText(mTime.toString("mm:ss.zzz"));

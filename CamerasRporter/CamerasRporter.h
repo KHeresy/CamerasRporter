@@ -36,5 +36,6 @@ public slots:
 
 private:
 	Ui::CamerasRporterClass		ui;
-	std::array<CameraUI*, 2>	aCameraUI;
+	std::array<CameraUI*, 2>	m_aCameraUI;
+	QSet<QDate>					m_setDate;
 };
