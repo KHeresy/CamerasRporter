@@ -25,7 +25,7 @@ CameraUI::CameraUI(QWidget *parent) :QWidget(parent)
 
 void CameraUI::playFile(int iIdx)
 {
-	if (iIdx > 0 && iIdx < m_vFileList.size())
+	if (iIdx >= 0 && iIdx < m_vFileList.size())
 	{
 		m_mPlayer.setMedia(QUrl::fromLocalFile(m_sPath + m_vFileList[iIdx].sFilename));
 		m_mPlayer.play();
