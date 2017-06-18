@@ -15,6 +15,7 @@ CamerasRporter::CamerasRporter(QWidget *parent)
 		m_mProfile.m_aCameraFolder << "/VIDA/" << "/VIDB/";
 		m_mProfile.m_sViedoFilenameFilter = "*.mp4";
 		m_mProfile.m_sFilenameToDateTime = "yyyyMMdd_HHmmss";
+		m_mProfile.m_tVideoLength = QTime(0, 1, 0, 0);
 	}
 
 	m_aCameraUI = { ui.camera1, ui.camera2 };
@@ -31,14 +32,16 @@ void CamerasRporter::slotOpenFolder()
 		ui.labelInfo->setText(tr("Path: ") + sFolderName);
 
 		// set path to Camera UI
-		m_setDate.clear();
+		m_mapDateTimeline.clear();
 		for (CameraUI* pCameraUI : m_aCameraUI)
 		{
 			if (pCameraUI->isEnabled())
 			{
 				if (pCameraUI->setPath(sFolderName))
 				{
-					m_setDate.unite(pCameraUI->getDaetSet());
+					const QSet<QDate>& setDate = pCameraUI->getDaetSet();
+					for (const QDate& rDate : setDate)
+						m_mapDateTimeline.insert(rDate, QMap<QDateTime, QDateTime>());
 				}
 				else
 				{
@@ -49,7 +52,26 @@ void CamerasRporter::slotOpenFolder()
 
 		// Update combo box
 		ui.comboDate->clear();
-		for (const QDate& rDate : m_setDate)
-			ui.comboDate->addItem(rDate.toString("yyyy/MM/dd"));
+		for (auto iter = m_mapDateTimeline.begin(); iter != m_mapDateTimeline.end(); ++iter)
+			ui.comboDate->addItem(iter.key().toString("yyyy/MM/dd"));
+	}
+}
+
+void CamerasRporter::slotDateChanged(int iIdx)
+{
+	auto iter = m_mapDateTimeline.begin() + iIdx;
+	const QDate& rDate = iter.key();
+	
+	for (CameraUI* pCameraUI : m_aCameraUI)
+	{
+		if (pCameraUI->isEnabled())
+		{
+			QMap<QTime, QTime> mapList = pCameraUI->getTimeSet(rDate);
+			ui.comboTime->clear();
+			for (auto iter = mapList.begin(); iter != mapList.end(); ++iter)
+			{
+				ui.comboTime->addItem(iter.key().toString("HH:ss") + "-" + iter->toString("HH:ss"));
+			}
+		}
 	}
 }

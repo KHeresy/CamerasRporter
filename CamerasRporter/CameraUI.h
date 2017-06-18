@@ -24,6 +24,7 @@ public:
 	{
 		return m_setDate;
 	}
+	QMap<QTime, QTime> getTimeSet(const QDate& mDate);
 
 public slots:
 	void playFile(int);
@@ -39,6 +40,21 @@ public slots:
 	void positionChanged(qint64 position);
 	void stateChanged(QMediaPlayer::State eState);
 
+protected:
+	struct SFileTimeInfo
+	{
+		QString		sFilename;
+		QDateTime	timeBegin;
+		QTime		timeLength;
+	};
+
+protected:
+	static QTime getTimeEnd(const SFileTimeInfo& sVideo)
+	{
+		static QTime timeZero(0, 0, 0, 0);
+		return (sVideo.timeBegin.addMSecs(timeZero.msecsTo(sVideo.timeLength))).time();
+	}
+
 private:
 	Ui::Form		ui;
 
@@ -48,9 +64,8 @@ private:
 	QMediaPlayer	m_mPlayer;
 	QString			m_sName;
 	QString			m_sPath;
-	QStringList		m_vFileList;
 
-	QVector<QDateTime>	m_vDateTimeList;
+	QVector<SFileTimeInfo>	m_vFileList;
 	QSet<QDate>			m_setDate;
 
 	QGraphicsVideoItem*	m_pVideoItem;

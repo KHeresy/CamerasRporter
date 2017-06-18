@@ -25,8 +25,12 @@ CameraUI::CameraUI(QWidget *parent) :QWidget(parent)
 
 void CameraUI::playFile(int iIdx)
 {
-	m_mPlayer.setMedia(QUrl::fromLocalFile(m_sPath + m_vFileList[iIdx]));
-	m_mPlayer.play();
+	if (iIdx > 0 && iIdx < m_vFileList.size())
+	{
+		m_mPlayer.setMedia(QUrl::fromLocalFile(m_sPath + m_vFileList[iIdx].sFilename));
+		m_mPlayer.play();
+		m_mPlayer.pause();
+	}
 }
 
 bool CameraUI::setPath(QString sPath)
@@ -35,17 +39,20 @@ bool CameraUI::setPath(QString sPath)
 	QDir dirFolder = m_sPath;
 	if (dirFolder.exists())
 	{
-		m_vFileList = dirFolder.entryList({ "*.mp4" }, QDir::Files, QDir::Name);
-		ui.comboFileList->clear();
-		ui.comboFileList->addItems(m_vFileList);
+		QStringList vFileList = dirFolder.entryList({ "*.mp4" }, QDir::Files, QDir::Name);
 
-		m_vDateTimeList.reserve(m_vFileList.size());
-		for (auto& sName : m_vFileList)
+		m_vFileList.clear();
+		m_vFileList.reserve(vFileList.size());
+
+		for (auto& sName : vFileList)
 		{
 			QDateTime mDateTime = QDateTime::fromString(sName.mid(0, 15), "yyyyMMdd_HHmmss");
-			m_vDateTimeList.push_back(mDateTime);
+			m_vFileList.push_back({ sName, mDateTime, QTime() });
 			m_setDate.insert(mDateTime.date());
 		}
+
+		ui.comboFileList->clear();
+		ui.comboFileList->addItems(vFileList);
 		return true;
 	}
 	return false;
@@ -54,6 +61,50 @@ bool CameraUI::setPath(QString sPath)
 void CameraUI::resizeEvent(QResizeEvent * pEvent)
 {
 	ui.videoArea->fitInView(m_pVideoItem, Qt::KeepAspectRatio);
+}
+
+QMap<QTime, QTime> CameraUI::getTimeSet(const QDate & mDate)
+{
+	static QTime timeZero(0, 0, 0, 0);
+	QMap<QTime, QTime> mapTimeList;
+
+	QPair<QTime, QTime> pTimeline;
+	for (auto& rFile : m_vFileList)
+	{
+		if (rFile.timeBegin.date() == mDate)
+		{
+			if (!rFile.timeLength.isValid())
+			{
+				//TODO: load from file?
+				rFile.timeLength = QTime(0, 1, 0, 0);
+			}
+
+			if (pTimeline.first.isValid())
+			{
+				if(pTimeline.second.secsTo(rFile.timeBegin.time()) > 20) //TODO: should make 20 as parameter
+				{
+					mapTimeList.insert(pTimeline.first, pTimeline.second);
+
+					pTimeline.first = rFile.timeBegin.time();
+					pTimeline.second = getTimeEnd(rFile);
+				}
+				else
+				{
+					pTimeline.second = getTimeEnd( rFile );
+				}
+			}
+			else
+			{
+				pTimeline.first = rFile.timeBegin.time();
+				pTimeline.second = getTimeEnd(rFile);
+			}
+		}
+	}
+
+	if(pTimeline.first.isValid())
+		mapTimeList.insert(pTimeline.first, pTimeline.second);
+
+	return mapTimeList;
 }
 
 void CameraUI::slotAudio(bool bClicked)
