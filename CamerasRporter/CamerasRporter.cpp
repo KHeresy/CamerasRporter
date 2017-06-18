@@ -54,6 +54,7 @@ void CamerasRporter::slotOpenFolder()
 		ui.comboDate->clear();
 		for (auto iter = m_mapDateTimeline.begin(); iter != m_mapDateTimeline.end(); ++iter)
 			ui.comboDate->addItem(iter.key().toString("yyyy/MM/dd"));
+		slotDateChanged(0);
 	}
 }
 
@@ -70,7 +71,7 @@ void CamerasRporter::slotDateChanged(int iIdx)
 			ui.comboTime->clear();
 			for (auto iter = mapList.begin(); iter != mapList.end(); ++iter)
 			{
-				ui.comboTime->addItem(iter.key().toString("HH:ss") + "-" + iter->toString("HH:ss"));
+				ui.comboTime->addItem(iter.key().toString("HH:mm") + " - " + iter->toString("HH:mm"));
 			}
 		}
 	}
