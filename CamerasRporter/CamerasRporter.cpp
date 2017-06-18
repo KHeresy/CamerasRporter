@@ -4,40 +4,22 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-CCameraInfo::CCameraInfo()
-{
-	m_pPlayer = new QMediaPlayer();
-}
-
-bool CCameraInfo::setPath(const QString & sPath)
-{
-	m_sPath = sPath + m_sFolder;
-	QDir dirFolder = m_sPath;
-	if (dirFolder.exists())
-	{
-		m_vFileList = dirFolder.entryList({ "*.mp4" }, QDir::Files, QDir::Name);
-		m_pComboBox->clear();
-		m_pComboBox->addItems(m_vFileList);
-		return true;
-	}
-	return false;
-}
-
-void CCameraInfo::play(int iIdx)
-{
-	m_pPlayer->setMedia(QUrl::fromLocalFile(m_sPath + m_vFileList[iIdx]));
-	m_pPlayer->play();
-	auto s = m_pPlayer->errorString();
-}
-
 CamerasRporter::CamerasRporter(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
 
+	//TODO: load frome file
+	{
+		m_mProfile.m_sName = "SGH D720";
+		m_mProfile.m_aCameraFolder << "/VIDA/" << "/VIDB/";
+		m_mProfile.m_sViedoFilenameFilter = "*.mp4";
+		m_mProfile.m_sFilenameToDateTime = "yyyyMMdd_HHmmss";
+	}
+
 	m_aCameraUI = { ui.camera1, ui.camera2 };
-	m_aCameraUI[0]->setName("/VIDA/");
-	m_aCameraUI[1]->setName("/VIDB/");
+	m_aCameraUI[0]->setName(m_mProfile.m_aCameraFolder[0]);
+	m_aCameraUI[1]->setName(m_mProfile.m_aCameraFolder[1]);
 }
 
 void CamerasRporter::slotOpenFolder()

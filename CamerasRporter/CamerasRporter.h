@@ -9,20 +9,7 @@
 
 #include "ui_CamerasRporter.h"
 
-class CCameraInfo
-{
-public:
-	QString			m_sFolder;
-	QString			m_sPath;
-	QStringList		m_vFileList;
-	QComboBox*		m_pComboBox;
-	QMediaPlayer*	m_pPlayer;
-
-public:
-	CCameraInfo();
-	bool setPath(const QString& sPath);
-	void play(int iIdx);
-};
+#include "CameraProfile.h"
 
 class CamerasRporter : public QMainWindow
 {
@@ -36,6 +23,8 @@ public slots:
 
 private:
 	Ui::CamerasRporterClass		ui;
+
+	CameraProfile				m_mProfile;
 	std::array<CameraUI*, 2>	m_aCameraUI;
 	QSet<QDate>					m_setDate;
 };
