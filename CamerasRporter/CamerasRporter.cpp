@@ -41,11 +41,11 @@ void CamerasRporter::slotOpenFolder()
 				{
 					const QSet<QDate>& setDate = pCameraUI->getDaetSet();
 					for (const QDate& rDate : setDate)
-						m_mapDateTimeline.insert(rDate, QMap<QDateTime, QDateTime>());
+						m_mapDateTimeline.insert(rDate, QMap<QTime, QTime>());
 				}
 				else
 				{
-
+					//TODO: can't load path
 				}
 			}
 		}
@@ -60,6 +60,9 @@ void CamerasRporter::slotOpenFolder()
 
 void CamerasRporter::slotDateChanged(int iIdx)
 {
+	if (iIdx < 0)
+		return;
+
 	auto iter = m_mapDateTimeline.begin() + iIdx;
 	const QDate& rDate = iter.key();
 	
@@ -67,12 +70,34 @@ void CamerasRporter::slotDateChanged(int iIdx)
 	{
 		if (pCameraUI->isEnabled())
 		{
+			//TODO: should merge the timeline of two camera
 			QMap<QTime, QTime> mapList = pCameraUI->getTimeSet(rDate);
+			iter.value() = mapList;
 			ui.comboTime->clear();
 			for (auto iter = mapList.begin(); iter != mapList.end(); ++iter)
 			{
-				ui.comboTime->addItem(iter.key().toString("HH:mm") + " - " + iter->toString("HH:mm"));
+				ui.comboTime->addItem(iter.key().toString("HH:mm:ss") + " - " + iter->toString("HH:mm:ss"));
 			}
 		}
 	}
+
+	slotTimeChanged(0);
+}
+
+void CamerasRporter::slotTimeChanged(int iIdx)
+{
+	if (iIdx < 0)
+		return;
+
+	const QMap<QTime, QTime>& mapTime = (m_mapDateTimeline.begin() + ui.comboDate->currentIndex()).value();
+
+	m_iterCurrentTimeLine = (mapTime.begin() + iIdx);
+	ui.sliderTimeLine->setMaximum(m_iterCurrentTimeLine.key().msecsTo(m_iterCurrentTimeLine.value()));
+	ui.sliderTimeLine->setValue(0);
+}
+
+void CamerasRporter::slotSetTimeline(int iTime)
+{
+	//TODO: find a place to show time
+	ui.labelInfo->setText(m_iterCurrentTimeLine.key().addMSecs(iTime).toString());
 }

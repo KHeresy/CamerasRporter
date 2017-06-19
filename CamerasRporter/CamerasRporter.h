@@ -21,11 +21,14 @@ public:
 public slots:
 	void slotOpenFolder();
 	void slotDateChanged(int iIdx);
+	void slotTimeChanged(int iIdx);
+	void slotSetTimeline(int iTime);
 
 private:
 	Ui::CamerasRporterClass		ui;
 
 	CameraProfile				m_mProfile;
 	std::array<CameraUI*, 2>	m_aCameraUI;
-	QMap<QDate, QMap<QDateTime, QDateTime>>	m_mapDateTimeline;
+	QMap<QDate, QMap<QTime, QTime>>		m_mapDateTimeline;
+	QMap<QTime, QTime>::const_iterator	m_iterCurrentTimeLine;
 };

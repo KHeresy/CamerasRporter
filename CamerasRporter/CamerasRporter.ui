@@ -221,13 +221,13 @@
               <widget class="QComboBox" name="comboTime">
                <property name="minimumSize">
                 <size>
-                 <width>90</width>
+                 <width>125</width>
                  <height>0</height>
                 </size>
                </property>
                <item>
                 <property name="text">
-                 <string>00:00 - 00:00</string>
+                 <string>00:00:00 - 00:00:00</string>
                 </property>
                </item>
               </widget>
@@ -236,12 +236,15 @@
            </widget>
           </item>
           <item>
-           <widget class="QGraphicsView" name="gViewTimeline">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>50</height>
-             </size>
+           <widget class="QSlider" name="sliderTimeLine">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::TicksAbove</enum>
+            </property>
+            <property name="tickInterval">
+             <number>60000</number>
             </property>
            </widget>
           </item>
@@ -479,9 +482,43 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>comboTime</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>CamerasRporterClass</receiver>
+   <slot>slotTimeChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>91</x>
+     <y>571</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>-4</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sliderTimeLine</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>CamerasRporterClass</receiver>
+   <slot>slotSetTimeline(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>272</x>
+     <y>563</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>539</x>
+     <y>-18</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slotOpenFolder()</slot>
   <slot>slotDateChanged(int)</slot>
+  <slot>slotTimeChanged(int)</slot>
+  <slot>slotSetTimeline(int)</slot>
  </slots>
 </ui>
