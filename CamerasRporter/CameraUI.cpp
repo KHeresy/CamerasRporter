@@ -9,6 +9,7 @@ CameraUI::CameraUI(QWidget *parent) :QWidget(parent)
 	ui.setupUi(this);
 
 	m_iTimeScaleInUI = 100;
+	m_iCurrentIndx = -1;
 
 	m_pVideoItem = new QGraphicsVideoItem();
 	ui.videoArea->setScene(new QGraphicsScene());
@@ -25,6 +26,7 @@ CameraUI::CameraUI(QWidget *parent) :QWidget(parent)
 
 void CameraUI::playFile(int iIdx)
 {
+	m_iCurrentIndx = iIdx;
 	if (iIdx >= 0 && iIdx < m_vFileList.size())
 	{
 		m_mPlayer.setMedia(QUrl::fromLocalFile(m_sPath + m_vFileList[iIdx].sFilename));
@@ -47,10 +49,9 @@ bool CameraUI::setPath(QString sPath)
 		for (auto& sName : vFileList)
 		{
 			QDateTime mDateTime = QDateTime::fromString(sName.mid(0, 15), "yyyyMMdd_HHmmss");
-			m_vFileList.push_back({ sName, mDateTime, QTime() });
+			m_vFileList.push_back({ sName, mDateTime, QDateTime() });
 			m_setDate.insert(mDateTime.date());
 		}
-
 		ui.comboFileList->clear();
 		ui.comboFileList->addItems(vFileList);
 		return true;
@@ -73,10 +74,10 @@ QMap<QTime, QTime> CameraUI::getTimeSet(const QDate & mDate)
 	{
 		if (rFile.timeBegin.date() == mDate)
 		{
-			if (!rFile.timeLength.isValid())
+			if (!rFile.timeEnd.isValid())
 			{
 				//TODO: load from file?
-				rFile.timeLength = QTime(0, 1, 0, 0);
+				rFile.timeEnd = rFile.timeBegin.addSecs(60);
 			}
 
 			if (pTimeline.first.isValid())
@@ -86,17 +87,17 @@ QMap<QTime, QTime> CameraUI::getTimeSet(const QDate & mDate)
 					mapTimeList.insert(pTimeline.first, pTimeline.second);
 
 					pTimeline.first = rFile.timeBegin.time();
-					pTimeline.second = getTimeEnd(rFile);
+					pTimeline.second = rFile.timeEnd.time();
 				}
 				else
 				{
-					pTimeline.second = getTimeEnd( rFile );
+					pTimeline.second = rFile.timeEnd.time();
 				}
 			}
 			else
 			{
 				pTimeline.first = rFile.timeBegin.time();
-				pTimeline.second = getTimeEnd(rFile);
+				pTimeline.second = rFile.timeEnd.time();
 			}
 		}
 	}
@@ -196,11 +197,18 @@ void CameraUI::stateChanged(QMediaPlayer::State eState)
 	{
 	case QMediaPlayer::PlayingState:
 		ui.buttonPlay->setChecked(true);
+		if (m_iCurrentIndx >= 0 )
+			emit beginPlay(m_vFileList[m_iCurrentIndx].timeBegin);
+		break;
+
+	case QMediaPlayer::PausedState:
+		ui.buttonPlay->setChecked(false);
 		break;
 
 	case QMediaPlayer::StoppedState:
-	case QMediaPlayer::PausedState:
 		ui.buttonPlay->setChecked(false);
+		if (m_iCurrentIndx < m_vFileList.size() - 1)
+			emit endPlay(m_vFileList[m_iCurrentIndx].timeBegin);
 		break;
 	}
 }

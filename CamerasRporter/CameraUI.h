@@ -40,20 +40,17 @@ public slots:
 	void positionChanged(qint64 position);
 	void stateChanged(QMediaPlayer::State eState);
 
+signals:
+	void beginPlay(QDateTime timeCurrent);
+	void endPlay(QDateTime timeNext);
+
 protected:
 	struct SFileTimeInfo
 	{
 		QString		sFilename;
 		QDateTime	timeBegin;
-		QTime		timeLength;
+		QDateTime	timeEnd;
 	};
-
-protected:
-	static QTime getTimeEnd(const SFileTimeInfo& sVideo)
-	{
-		static QTime timeZero(0, 0, 0, 0);
-		return (sVideo.timeBegin.addMSecs(timeZero.msecsTo(sVideo.timeLength))).time();
-	}
 
 private:
 	Ui::Form		ui;
@@ -66,7 +63,8 @@ private:
 	QString			m_sPath;
 
 	QVector<SFileTimeInfo>	m_vFileList;
-	QSet<QDate>			m_setDate;
+	int						m_iCurrentIndx;
+	QSet<QDate>				m_setDate;
 
 	QGraphicsVideoItem*	m_pVideoItem;
 };
