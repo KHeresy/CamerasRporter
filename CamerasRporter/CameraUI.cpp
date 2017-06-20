@@ -64,12 +64,11 @@ void CameraUI::resizeEvent(QResizeEvent * pEvent)
 	ui.videoArea->fitInView(m_pVideoItem, Qt::KeepAspectRatio);
 }
 
-QMap<QTime, QTime> CameraUI::getTimeSet(const QDate & mDate)
+QMap<QDateTime, QDateTime> CameraUI::getTimeSet(const QDate & mDate)
 {
-	static QTime timeZero(0, 0, 0, 0);
-	QMap<QTime, QTime> mapTimeList;
+	QMap<QDateTime, QDateTime> mapTimeList;
 
-	QPair<QTime, QTime> pTimeline;
+	QPair<QDateTime, QDateTime> pTimeline;
 	for (auto& rFile : m_vFileList)
 	{
 		if (rFile.timeBegin.date() == mDate)
@@ -82,22 +81,22 @@ QMap<QTime, QTime> CameraUI::getTimeSet(const QDate & mDate)
 
 			if (pTimeline.first.isValid())
 			{
-				if(pTimeline.second.secsTo(rFile.timeBegin.time()) > 20) //TODO: should make 20 as parameter
+				if(pTimeline.second.secsTo(rFile.timeBegin) > 20) //TODO: should make 20 as parameter
 				{
 					mapTimeList.insert(pTimeline.first, pTimeline.second);
 
-					pTimeline.first = rFile.timeBegin.time();
-					pTimeline.second = rFile.timeEnd.time();
+					pTimeline.first = rFile.timeBegin;
+					pTimeline.second = rFile.timeEnd;
 				}
 				else
 				{
-					pTimeline.second = rFile.timeEnd.time();
+					pTimeline.second = rFile.timeEnd;
 				}
 			}
 			else
 			{
-				pTimeline.first = rFile.timeBegin.time();
-				pTimeline.second = rFile.timeEnd.time();
+				pTimeline.first = rFile.timeBegin;
+				pTimeline.second = rFile.timeEnd;
 			}
 		}
 	}
@@ -106,6 +105,71 @@ QMap<QTime, QTime> CameraUI::getTimeSet(const QDate & mDate)
 		mapTimeList.insert(pTimeline.first, pTimeline.second);
 
 	return mapTimeList;
+}
+
+bool CameraUI::playTime(const QDateTime & timeToPlay)
+{
+	if (m_iCurrentIndx < 0)
+		m_iCurrentIndx = m_vFileList.size() / 2;
+
+	if (m_vFileList[m_iCurrentIndx].timeBegin > timeToPlay)
+	{
+		for (int i = m_iCurrentIndx; i >= 0; --i)
+		{
+			if (m_vFileList[i].timeEnd < timeToPlay)
+				break;
+
+			if (m_vFileList[i].timeBegin <= timeToPlay)
+			{
+				m_iCurrentIndx = i;
+				m_mPlayer.setMedia(QUrl::fromLocalFile(m_sPath + m_vFileList[i].sFilename));
+				m_mPlayer.play();
+				m_mPlayer.setPosition(m_vFileList[i].timeBegin.msecsTo(timeToPlay));
+				return true;
+			}
+		}
+	}
+	else
+	{
+		if (m_vFileList[m_iCurrentIndx].timeEnd > timeToPlay)
+		{
+			m_mPlayer.setPosition(m_vFileList[m_iCurrentIndx].timeBegin.msecsTo(timeToPlay));
+			return true;
+		}
+		else
+		{
+			for (int i = m_iCurrentIndx; i < m_vFileList.size(); ++i)
+			{
+				if (m_vFileList[i].timeBegin > timeToPlay)
+					break;
+
+				if (m_vFileList[i].timeEnd > timeToPlay)
+				{
+					m_iCurrentIndx = i;
+					m_mPlayer.setMedia(QUrl::fromLocalFile(m_sPath + m_vFileList[i].sFilename));
+					m_mPlayer.play();
+					m_mPlayer.setPosition(m_vFileList[i].timeBegin.msecsTo(timeToPlay));
+					return true;
+				}
+			}
+		}
+	}
+
+	//TODO: may use binary search
+	for (int i = 0; i < m_vFileList.size(); ++i)
+	{
+		if (m_vFileList[i].timeBegin <= timeToPlay && m_vFileList[i].timeEnd > timeToPlay)
+		{
+			m_iCurrentIndx = i;
+			m_mPlayer.setMedia(QUrl::fromLocalFile(m_sPath + m_vFileList[i].sFilename));
+			m_mPlayer.play();
+			m_mPlayer.setPosition(m_vFileList[i].timeBegin.msecsTo(timeToPlay));
+			return true;
+		}
+	}
+
+	m_iCurrentIndx = -1;
+	return false;
 }
 
 void CameraUI::slotAudio(bool bClicked)
@@ -208,7 +272,7 @@ void CameraUI::stateChanged(QMediaPlayer::State eState)
 	case QMediaPlayer::StoppedState:
 		ui.buttonPlay->setChecked(false);
 		if (m_iCurrentIndx < m_vFileList.size() - 1)
-			emit endPlay(m_vFileList[m_iCurrentIndx].timeBegin);
+			emit endPlay(m_vFileList[m_iCurrentIndx+1].timeBegin);
 		break;
 	}
 }

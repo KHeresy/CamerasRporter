@@ -24,7 +24,8 @@ public:
 	{
 		return m_setDate;
 	}
-	QMap<QTime, QTime> getTimeSet(const QDate& mDate);
+	QMap<QDateTime, QDateTime> getTimeSet(const QDate& mDate);
+	bool playTime(const QDateTime& timeToPlay);
 
 public slots:
 	void playFile(int);

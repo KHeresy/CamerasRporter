@@ -29,6 +29,6 @@ private:
 
 	CameraProfile				m_mProfile;
 	std::array<CameraUI*, 2>	m_aCameraUI;
-	QMap<QDate, QMap<QTime, QTime>>		m_mapDateTimeline;
-	QMap<QTime, QTime>::const_iterator	m_iterCurrentTimeLine;
+	QMap<QDate, QMap<QDateTime, QDateTime>>		m_mapDateTimeline;
+	QMap<QDateTime, QDateTime>::const_iterator	m_iterCurrentTimeLine;
 };

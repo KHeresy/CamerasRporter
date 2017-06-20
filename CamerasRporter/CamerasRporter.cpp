@@ -41,7 +41,7 @@ void CamerasRporter::slotOpenFolder()
 				{
 					const QSet<QDate>& setDate = pCameraUI->getDaetSet();
 					for (const QDate& rDate : setDate)
-						m_mapDateTimeline.insert(rDate, QMap<QTime, QTime>());
+						m_mapDateTimeline.insert(rDate, QMap<QDateTime, QDateTime>());
 				}
 				else
 				{
@@ -71,7 +71,7 @@ void CamerasRporter::slotDateChanged(int iIdx)
 		if (pCameraUI->isEnabled())
 		{
 			//TODO: should merge the timeline of two camera
-			QMap<QTime, QTime> mapList = pCameraUI->getTimeSet(rDate);
+			QMap<QDateTime, QDateTime> mapList = pCameraUI->getTimeSet(rDate);
 			iter.value() = mapList;
 			ui.comboTime->clear();
 			for (auto iter = mapList.begin(); iter != mapList.end(); ++iter)
@@ -89,15 +89,25 @@ void CamerasRporter::slotTimeChanged(int iIdx)
 	if (iIdx < 0)
 		return;
 
-	const QMap<QTime, QTime>& mapTime = (m_mapDateTimeline.begin() + ui.comboDate->currentIndex()).value();
+	const QMap<QDateTime, QDateTime>& mapTime = (m_mapDateTimeline.begin() + ui.comboDate->currentIndex()).value();
 
 	m_iterCurrentTimeLine = (mapTime.begin() + iIdx);
 	ui.sliderTimeLine->setMaximum(m_iterCurrentTimeLine.key().msecsTo(m_iterCurrentTimeLine.value()));
 	ui.sliderTimeLine->setValue(0);
+
+	for (CameraUI* pCameraUI : m_aCameraUI)
+	{
+		pCameraUI->playTime(m_iterCurrentTimeLine.key());
+	}
 }
 
 void CamerasRporter::slotSetTimeline(int iTime)
 {
 	//TODO: find a place to show time
 	ui.labelInfo->setText(m_iterCurrentTimeLine.key().addMSecs(iTime).toString());
+
+	for (CameraUI* pCameraUI : m_aCameraUI)
+	{
+		pCameraUI->playTime(m_iterCurrentTimeLine.key().addMSecs(iTime));
+	}
 }
