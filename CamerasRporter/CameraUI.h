@@ -44,6 +44,7 @@ public slots:
 signals:
 	void beginPlay(QDateTime timeCurrent);
 	void endPlay(QDateTime timeNext);
+	void timeChanged(QDateTime timeNext);
 
 protected:
 	struct SFileTimeInfo
@@ -64,7 +65,7 @@ private:
 	QString			m_sPath;
 
 	QVector<SFileTimeInfo>	m_vFileList;
-	int						m_iCurrentIndx;
+	int						m_iCurrentIndx;	//TODO: should use iterator?
 	QSet<QDate>				m_setDate;
 
 	QGraphicsVideoItem*	m_pVideoItem;

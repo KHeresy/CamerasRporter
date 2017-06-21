@@ -249,10 +249,15 @@ void CameraUI::mediaStatusChanged(QMediaPlayer::MediaStatus eStatus)
 
 void CameraUI::positionChanged(qint64 position)
 {
-	ui.sliderTime->setValue(position / m_iTimeScaleInUI);
+	if (m_iCurrentIndx >= 0)
+	{
+		ui.sliderTime->setValue(position / m_iTimeScaleInUI);
 
-	QTime mTime = QTime::fromMSecsSinceStartOfDay(position);
-	ui.labelCurrentTime->setText(mTime.toString("mm:ss.zzz"));
+		emit timeChanged(m_vFileList[m_iCurrentIndx].timeBegin.addMSecs(position));
+
+		QTime mTime = QTime::fromMSecsSinceStartOfDay(position);
+		ui.labelCurrentTime->setText(mTime.toString("mm:ss.zzz"));
+	}
 }
 
 void CameraUI::stateChanged(QMediaPlayer::State eState)
