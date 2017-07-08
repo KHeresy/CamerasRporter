@@ -21,6 +21,11 @@ CamerasRporter::CamerasRporter(QWidget *parent)
 	m_aCameraUI = { ui.camera1, ui.camera2 };
 	m_aCameraUI[0]->setName(m_mProfile.m_aCameraFolder[0]);
 	m_aCameraUI[1]->setName(m_mProfile.m_aCameraFolder[1]);
+
+	connect(ui.camera1, &CameraUI::endPlay, this, &CamerasRporter::slotCamera1FinishPlay);
+	connect(ui.camera2, &CameraUI::endPlay, this, &CamerasRporter::slotCamera2FinishPlay);
+	connect(ui.camera1, &CameraUI::timeChanged, this, &CamerasRporter::slotCamera1PlayTime);
+	connect(ui.camera2, &CameraUI::timeChanged, this, &CamerasRporter::slotCamera2PlayTime);
 }
 
 void CamerasRporter::slotOpenFolder()
@@ -41,7 +46,7 @@ void CamerasRporter::slotOpenFolder()
 				{
 					const QSet<QDate>& setDate = pCameraUI->getDaetSet();
 					for (const QDate& rDate : setDate)
-						m_mapDateTimeline.insert(rDate, QMap<QDateTime, QDateTime>());
+						m_mapDateTimeline.insert(rDate, TTimeLine());
 				}
 				else
 				{
@@ -71,7 +76,7 @@ void CamerasRporter::slotDateChanged(int iIdx)
 		if (pCameraUI->isEnabled())
 		{
 			//TODO: should merge the timeline of two camera
-			QMap<QDateTime, QDateTime> mapList = pCameraUI->getTimeSet(rDate);
+			TTimeLine mapList = pCameraUI->getTimeSet(rDate);
 			iter.value() = mapList;
 			ui.comboTime->clear();
 			for (auto iter = mapList.begin(); iter != mapList.end(); ++iter)
@@ -89,7 +94,7 @@ void CamerasRporter::slotTimeChanged(int iIdx)
 	if (iIdx < 0)
 		return;
 
-	const QMap<QDateTime, QDateTime>& mapTime = (m_mapDateTimeline.begin() + ui.comboDate->currentIndex()).value();
+	const TTimeLine& mapTime = (m_mapDateTimeline.begin() + ui.comboDate->currentIndex()).value();
 
 	m_iterCurrentTimeLine = (mapTime.begin() + iIdx);
 	ui.sliderTimeLine->setMaximum(m_iterCurrentTimeLine.key().msecsTo(m_iterCurrentTimeLine.value()));
@@ -110,4 +115,25 @@ void CamerasRporter::slotSetTimeline(int iTime)
 	{
 		pCameraUI->playTime(m_iterCurrentTimeLine.key().addMSecs(iTime));
 	}
+}
+
+void CamerasRporter::slotCamera1FinishPlay(QDateTime timeNext)
+{
+}
+
+void CamerasRporter::slotCamera2FinishPlay(QDateTime timeNext)
+{
+}
+
+void CamerasRporter::slotCamera1PlayTime(QDateTime timePlay)
+{
+	if (m_iterCurrentTimeLine != nullptr)
+	{
+		ui.sliderTimeLine->setValue(m_iterCurrentTimeLine.key().msecsTo(timePlay));
+		ui.labelInfo->setText(timePlay.toString());
+	}
+}
+
+void CamerasRporter::slotCamera2PlayTime(QDateTime timePlay)
+{
 }
