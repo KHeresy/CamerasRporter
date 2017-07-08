@@ -1,8 +1,9 @@
 #pragma once
 
 #include <QDateTime>
-#include <QGraphicsVideoItem>
-#include <QMediaPlayer>
+#include <QtAV/AVPlayer.h>
+#include <QtAVWidgets/GraphicsItemRenderer.h>
+
 #include <QtWidgets/QWidget>
 
 #include "ui_CameraUI.h"
@@ -37,9 +38,9 @@ public slots:
 	void slotSliderAction(int);
 	void slotSaveImage();
 	void durationChanged(qint64 duration);
-	void mediaStatusChanged(QMediaPlayer::MediaStatus status);
+	void mediaStatusChanged(QtAV::MediaStatus status);
 	void positionChanged(qint64 position);
-	void stateChanged(QMediaPlayer::State eState);
+	void stateChanged(QtAV::AVPlayer::State eState);
 
 signals:
 	void beginPlay(QDateTime timeCurrent);
@@ -55,18 +56,19 @@ protected:
 	};
 
 private:
-	Ui::Form		ui;
+	Ui::Form	ui;
 
-	int				m_iFrameInterval;
-	int				m_iTimeScaleInUI;
+	int			m_iFrameInterval;
+	int			m_iTimeScaleInUI;
 
-	QMediaPlayer	m_mPlayer;
-	QString			m_sName;
-	QString			m_sPath;
+	QString		m_sName;
+	QString		m_sPath;
 
 	QVector<SFileTimeInfo>	m_vFileList;
 	int						m_iCurrentIndx;	//TODO: should use iterator?
 	QSet<QDate>				m_setDate;
 
-	QGraphicsVideoItem*	m_pVideoItem;
+	QtAV::AVPlayer				m_mPlayer;
+	QtAV::GraphicsItemRenderer*	m_pVideoItem;
+
 };
